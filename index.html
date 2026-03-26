@@ -33,44 +33,22 @@
 
   /* TOP NAV */
   .top-nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: sticky; top: 0; z-index: 100;
     background: rgba(14,15,19,0.92);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    height: 52px;
+    display: flex; align-items: center;
+    padding: 0 32px; height: 52px;
   }
-
-  .nav-logo {
-    font-size: 0.9rem;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    margin-right: 32px;
-    white-space: nowrap;
-  }
-
+  .nav-logo { font-size: 0.9rem; font-weight: 800; color: var(--text); margin-right: 32px; white-space: nowrap; }
   .nav-logo span { color: var(--muted); }
-
   .nav-tab {
-    height: 52px;
-    display: flex;
-    align-items: center;
-    padding: 0 18px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-    cursor: pointer;
+    height: 52px; display: flex; align-items: center;
+    padding: 0 18px; font-size: 0.82rem; font-weight: 700;
+    letter-spacing: 0.04em; color: var(--muted); cursor: pointer;
     border-bottom: 2px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
-    user-select: none;
+    transition: color 0.15s, border-color 0.15s; user-select: none;
   }
-
   .nav-tab:hover { color: var(--text); }
   .nav-tab.active { color: var(--text); border-bottom-color: var(--text); }
 
@@ -79,138 +57,45 @@
   .page.active { display: block; }
 
   /* SECTION HEADER */
-  .section-header {
-    max-width: 1100px;
-    margin: 0 auto 28px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
+  .section-header { max-width: 1100px; margin: 0 auto 28px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .section-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
   .section-title span { color: var(--muted); }
   .last-update { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); }
 
-  /* SUBPAGE TABS */
-  .subtab-bar {
-    max-width: 1100px;
-    margin: 0 auto 32px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
+  /* SUBTABS */
+  .subtab-bar { max-width: 1100px; margin: 0 auto 32px; display: flex; gap: 8px; flex-wrap: wrap; }
   .subtab {
-    padding: 7px 18px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    background: transparent;
-    font-family: 'Syne', sans-serif;
+    padding: 7px 18px; border-radius: 8px; border: 1px solid var(--border);
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--muted); cursor: pointer; transition: all 0.15s;
+    background: transparent; font-family: 'Syne', sans-serif;
   }
-
   .subtab:hover { color: var(--text); background: var(--surface); }
   .subtab.active { background: var(--surface); color: var(--text); border-color: #3a3d4a; }
-
   .subpage { display: none; }
   .subpage.active { display: block; }
 
   /* TIER LIST */
-  .tierlist {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .tier-row {
-    display: flex;
-    align-items: stretch;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
-
-  .tier-label {
-    width: 64px;
-    min-width: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    flex-shrink: 0;
-  }
-
+  .tierlist { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 6px; }
+  .tier-row { display: flex; align-items: stretch; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .tier-label { width: 64px; min-width: 64px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; flex-shrink: 0; }
   .tier-S .tier-label { background: #ff4d4d; color: #fff; }
   .tier-A .tier-label { background: #ff9b3d; color: #fff; }
   .tier-B .tier-label { background: #f5c518; color: #1a1a1a; }
   .tier-C .tier-label { background: #5bc25b; color: #fff; }
   .tier-D .tier-label { background: #4da6ff; color: #fff; }
-
-  .tier-items {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: var(--surface);
-  }
-
-  .rune-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    cursor: default;
-  }
-
+  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 16px; background: var(--surface); }
+  .rune-card { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: default; }
   .rune-img-wrap {
-    width: 64px;
-    height: 64px;
-    border-radius: 8px;
-    background: #1a1c22;
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    position: relative;
+    width: 64px; height: 64px; border-radius: 8px;
+    background: #1a1c22; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; position: relative;
     transition: border-color 0.15s, transform 0.15s;
   }
-
   .rune-card:hover .rune-img-wrap { border-color: #4a4d5a; transform: translateY(-2px); }
-
-  .rune-count {
-    position: absolute;
-    bottom: 3px;
-    right: 5px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    font-weight: 500;
-    color: #fff;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-  }
-
-  .rune-name {
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-align: center;
-    max-width: 72px;
-    line-height: 1.2;
-  }
-
+  .rune-count { position: absolute; bottom: 3px; right: 5px; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+  .rune-name { font-size: 0.68rem; font-weight: 600; color: var(--muted); text-align: center; max-width: 72px; line-height: 1.2; }
   .rune-primordial  .rune-img-wrap { border-color: #c0392b; background: #2a1515; }
   .rune-radiant     .rune-img-wrap { border-color: #f39c12; background: #2a2010; }
   .rune-havoc       .rune-img-wrap { border-color: #e74c3c; background: #251010; }
@@ -224,127 +109,69 @@
   .rune-suppression .rune-img-wrap { border-color: #2e86c1; background: #0d1820; }
 
   /* PLACEHOLDER */
-  .placeholder {
-    max-width: 900px;
-    margin: 0 auto;
-    height: 280px;
-    border: 2px dashed var(--border);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: var(--muted);
-  }
-
+  .placeholder { max-width: 900px; margin: 0 auto; height: 280px; border: 2px dashed var(--border); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
   .placeholder-icon { font-size: 2.5rem; opacity: 0.4; }
-  .placeholder-text { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; opacity: 0.5; }
+  .placeholder-text { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; color: var(--muted); opacity: 0.5; }
+
+  /* CODES PAGE */
+  .codes-grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .code-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: border-color 0.15s; }
+  .code-card:hover { border-color: #3a3d4a; }
+  .code-text { font-family: 'DM Mono', monospace; font-size: 0.82rem; font-weight: 500; color: var(--text); word-break: break-all; }
+  .copy-btn {
+    flex-shrink: 0; background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 7px; color: var(--muted); font-family: 'Syne', sans-serif;
+    font-size: 0.72rem; font-weight: 700; padding: 5px 11px;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .copy-btn:hover { color: var(--text); border-color: #3a3d4a; }
+  .copy-btn.copied { color: var(--good); border-color: var(--good); }
 
   /* STATS PAGE */
-  .stats-header {
-    max-width: 1100px;
-    margin: 0 auto 48px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
+  .stats-header { max-width: 1100px; margin: 0 auto 48px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .site-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
   .site-title span { color: var(--muted); }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-    max-width: 1100px;
-    margin: 0 auto 32px;
-  }
-
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto 32px; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-
-  .card-header {
-    padding: 20px 24px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
+  .card-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
   .card-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-
   .card-title { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
   .card-total { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 0.8rem; }
   .card-body { padding: 8px 0; }
-
   .row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; padding: 6px 24px; transition: background 0.15s; }
   .row:hover { background: rgba(255,255,255,0.02); }
   .row-label { font-size: 0.85rem; color: #c0c4d0; font-weight: 500; }
   .row-best { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); min-width: 52px; text-align: right; }
   .input-wrap { position: relative; width: 90px; }
-
-  .stat-input {
-    width: 100%;
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    padding: 5px 24px 5px 10px;
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-    text-align: right;
-  }
-
+  .stat-input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.82rem; padding: 5px 24px 5px 10px; outline: none; transition: border-color 0.2s, background 0.2s; text-align: right; }
   .stat-input:focus { border-color: #3a3d4a; background: var(--input-focus); }
-  .stat-input::placeholder { color: var(--muted); }
-
-  .pct-symbol {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); pointer-events: none;
-  }
-
+  .pct-symbol { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); pointer-events: none; }
   .divider { height: 1px; background: var(--border); margin: 8px 24px; }
-
   .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 24px 14px; }
   .summary-label { font-size: 0.75rem; color: var(--muted); font-weight: 600; letter-spacing: 0.05em; }
   .summary-val { font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500; }
   .summary-row.yours .summary-val { color: var(--text); }
   .summary-row.missing .summary-val { color: var(--bad); }
-
-  .progress-bar { height: 3px; background: var(--border); position: relative; overflow: hidden; }
+  .progress-bar { height: 3px; background: var(--border); overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
-
   .card.dmg .card-dot { background: var(--accent-dmg); }
   .card.dmg .card-title { color: var(--accent-dmg); opacity: 0.9; }
   .card.dmg .progress-fill { background: var(--accent-dmg); }
   .card.dmg .stat-input:focus { border-color: var(--accent-dmg); box-shadow: 0 0 0 2px rgba(249,115,22,0.08); }
-
   .card.cc .card-dot { background: var(--accent-cc); }
   .card.cc .card-title { color: var(--accent-cc); opacity: 0.9; }
   .card.cc .progress-fill { background: var(--accent-cc); }
   .card.cc .stat-input:focus { border-color: var(--accent-cc); box-shadow: 0 0 0 2px rgba(167,139,250,0.08); }
-
   .card.cd .card-dot { background: var(--accent-cd); }
   .card.cd .card-title { color: var(--accent-cd); opacity: 0.9; }
   .card.cd .progress-fill { background: var(--accent-cd); }
   .card.cd .stat-input:focus { border-color: var(--accent-cd); box-shadow: 0 0 0 2px rgba(52,211,153,0.08); }
-
   .actions { max-width: 1100px; margin: 0 auto; display: flex; justify-content: flex-end; gap: 12px; }
-
-  .btn {
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em;
-    padding: 10px 22px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s;
-  }
-
+  .btn { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; padding: 10px 22px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
   .btn-ghost { background: transparent; color: var(--muted); }
   .btn-ghost:hover { color: var(--text); background: var(--surface); }
   .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
   .btn-primary:hover { opacity: 0.85; }
-
   .save-msg { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--good); align-self: center; opacity: 0; transition: opacity 0.3s; }
   .save-msg.visible { opacity: 1; }
 </style>
@@ -353,19 +180,35 @@
 
 <nav class="top-nav">
   <div class="nav-logo">Sailor Piece <span>/ Build Tracker</span></div>
-  <div class="nav-tab active" onclick="showPage('tierlist', this)">Tier List</div>
-  <div class="nav-tab" onclick="showPage('stats', this)">Mes Stats</div>
+  <div class="nav-tab active" onclick="showPage('stats', this)">Mes Stats</div>
+  <div class="nav-tab" onclick="showPage('tierlist', this)">Tier List</div>
+  <div class="nav-tab" onclick="showPage('codes', this)">Codes</div>
 </nav>
 
+<!-- STATS PAGE -->
+<div class="page active" id="page-stats">
+  <div class="stats-header">
+    <div>
+      <div class="site-title">Mes Stats <span>/ Build Tracker</span></div>
+      <div class="last-update">Mis à jour le 2026-03-26</div>
+    </div>
+    <div class="actions" style="margin:0">
+      <span class="save-msg" id="saveMsg">✓ Sauvegardé</span>
+      <button class="btn btn-ghost" onclick="resetAll()">Réinitialiser</button>
+      <button class="btn btn-primary" onclick="saveAll()">Sauvegarder</button>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
 <!-- TIER LIST PAGE -->
-<div class="page active" id="page-tierlist">
+<div class="page" id="page-tierlist">
   <div class="section-header">
     <div>
       <div class="section-title">Tier List <span>/ Classement</span></div>
       <div class="last-update">Mis à jour le 2026-03-26</div>
     </div>
   </div>
-
   <div class="subtab-bar">
     <button class="subtab active" onclick="showSubpage('runes', this)">Runes</button>
     <button class="subtab" onclick="showSubpage('sub2', this)">— à venir</button>
@@ -373,7 +216,6 @@
     <button class="subtab" onclick="showSubpage('sub4', this)">— à venir</button>
     <button class="subtab" onclick="showSubpage('sub5', this)">— à venir</button>
   </div>
-
   <div class="subpage active" id="subpage-runes">
     <div class="tierlist">
       <div class="tier-row tier-S">
@@ -389,7 +231,6 @@
           </div>
         </div>
       </div>
-
       <div class="tier-row tier-A">
         <div class="tier-label">A</div>
         <div class="tier-items">
@@ -403,7 +244,6 @@
           </div>
         </div>
       </div>
-
       <div class="tier-row tier-B">
         <div class="tier-label">B</div>
         <div class="tier-items">
@@ -417,7 +257,6 @@
           </div>
         </div>
       </div>
-
       <div class="tier-row tier-C">
         <div class="tier-label">C</div>
         <div class="tier-items">
@@ -439,7 +278,6 @@
           </div>
         </div>
       </div>
-
       <div class="tier-row tier-D">
         <div class="tier-label">D</div>
         <div class="tier-items">
@@ -451,77 +289,99 @@
       </div>
     </div>
   </div>
-
-  <div class="subpage" id="subpage-sub2">
-    <div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div>
-  </div>
-  <div class="subpage" id="subpage-sub3">
-    <div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div>
-  </div>
-  <div class="subpage" id="subpage-sub4">
-    <div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div>
-  </div>
-  <div class="subpage" id="subpage-sub5">
-    <div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div>
-  </div>
+  <div class="subpage" id="subpage-sub2"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
+  <div class="subpage" id="subpage-sub3"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
+  <div class="subpage" id="subpage-sub4"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
+  <div class="subpage" id="subpage-sub5"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
 </div>
 
-<!-- STATS PAGE (unchanged) -->
-<div class="page" id="page-stats">
-  <div class="stats-header">
+<!-- CODES PAGE -->
+<div class="page" id="page-codes">
+  <div class="section-header">
     <div>
-      <div class="site-title">Mes Stats <span>/ Build Tracker</span></div>
+      <div class="section-title">Codes <span>/ Actuels</span></div>
       <div class="last-update">Mis à jour le 2026-03-26</div>
     </div>
-    <div class="actions" style="margin:0">
-      <span class="save-msg" id="saveMsg">✓ Sauvegardé</span>
-      <button class="btn btn-ghost" onclick="resetAll()">Réinitialiser</button>
-      <button class="btn btn-primary" onclick="saveAll()">Sauvegarder</button>
-    </div>
   </div>
-  <div class="grid" id="grid"></div>
+  <div class="codes-grid" id="codes-grid"></div>
 </div>
 
 <script>
+// ── Navigation ──
 function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
   document.getElementById('page-' + id).classList.add('active');
   el.classList.add('active');
 }
 
 function showSubpage(id, el) {
-  document.querySelectorAll('.subpage').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.subtab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.subpage').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.subtab').forEach(function(t) { t.classList.remove('active'); });
   document.getElementById('subpage-' + id).classList.add('active');
   el.classList.add('active');
 }
 
-const DATA = {
+// ── Codes ──
+var CODES = [
+  "320KCCUWOW",
+  "335KCCUTYSM",
+  "350KCCUINSANEE",
+  "365KCCUOP",
+  "380KCCUSOCRAZY",
+  "INSANE410KCCU",
+  "SORRYFORALLTHEBUGSS",
+  "SORRYFORALLTHEBUGSBUTBETTER",
+  "MASSIVEUPDATE",
+  "INFINITETOWER",
+  "SEA2SOON",
+  "175KFOLLOWSTYSM",
+  "150MVISITS"
+];
+
+function buildCodes() {
+  var grid = document.getElementById('codes-grid');
+  if (!grid) return;
+  grid.innerHTML = CODES.map(function(code, i) {
+    return '<div class="code-card"><span class="code-text">' + code + '</span><button class="copy-btn" id="copybtn-' + i + '" onclick="copyCode(\'' + code + '\',' + i + ')">Copier</button></div>';
+  }).join('');
+}
+
+function copyCode(code, i) {
+  navigator.clipboard.writeText(code).then(function() {
+    var btn = document.getElementById('copybtn-' + i);
+    btn.textContent = '✓ Copié';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ── Stats ──
+var DATA = {
   dmg: {
-    label: "DÉGATS", class: "dmg", best_total: 975,
+    label: "DÉGATS", cls: "dmg", best_total: 975,
     rows: [
       { id: "dmg_artefacts",  label: "Artéfacts",      best: 93.8,  yours: 79.4  },
       { id: "dmg_runes",      label: "Runes",           best: 120,   yours: 67    },
       { id: "dmg_accesoires", label: "Accesoires",      best: 122.5, yours: 116   },
       { id: "dmg_passive",    label: "Passive d'arme",  best: 35,    yours: 29    },
-      { id: "dmg_race",       label: "Race",             best: 80,    yours: 80    },
-      { id: "dmg_aura",       label: "Aura",             best: 15,    yours: 12.5  },
+      { id: "dmg_race",       label: "Race",            best: 80,    yours: 80    },
+      { id: "dmg_aura",       label: "Aura",            best: 15,    yours: 12.5  },
       { id: "dmg_rush",       label: "Rush de boss",    best: 25,    yours: 25    },
-      { id: "dmg_haki",       label: "Haki",             best: 75.5,  yours: 75.5  },
-      { id: "dmg_conq",       label: "Conq Haki",        best: 34,    yours: 14    },
+      { id: "dmg_haki",       label: "Haki",            best: 75.5,  yours: 75.5  },
+      { id: "dmg_conq",       label: "Conq Haki",       best: 34,    yours: 14    },
       { id: "dmg_reroll",     label: "Stat Re-roll",    best: 37,    yours: 30    },
-      { id: "dmg_titre",      label: "Titre",            best: 82.5,  yours: 75    },
+      { id: "dmg_titre",      label: "Titre",           best: 82.5,  yours: 75    },
       { id: "dmg_arbre",      label: "Arbre de compét", best: 25,    yours: 25    },
       { id: "dmg_blessing",   label: "Blessing (B?)",   best: 25,    yours: 25    },
       { id: "dmg_tour",       label: "Tour Infinie",    best: 25,    yours: 25    },
-      { id: "dmg_clan",       label: "Clan",             best: 35,    yours: 35    },
-      { id: "dmg_trait",      label: "Trait",            best: 130,   yours: 130   },
-      { id: "dmg_cosmetique", label: "Cosmetique",      best: 15,    yours: 15    },
+      { id: "dmg_clan",       label: "Clan",            best: 35,    yours: 35    },
+      { id: "dmg_trait",      label: "Trait",           best: 130,   yours: 130   },
+      { id: "dmg_cosmetique", label: "Cosmetique",      best: 15,    yours: 15    }
     ]
   },
   cc: {
-    label: "CC — Chance de Crit", class: "cc", best_total: 318,
+    label: "CC — Chance de Crit", cls: "cc", best_total: 318,
     rows: [
       { id: "cc_artefact",  label: "Artéfact",         best: 79.6, yours: 73   },
       { id: "cc_tour",      label: "Tour Infinie",      best: 5,    yours: 0    },
@@ -539,11 +399,11 @@ const DATA = {
       { id: "cc_base",      label: "Base",              best: 100,  yours: 100  },
       { id: "cc_race",      label: "Race",              best: 25,   yours: 25   },
       { id: "cc_clan",      label: "Clan",              best: 12.5, yours: 12.5 },
-      { id: "cc_ascension", label: "Ascension",         best: 40,   yours: 40   },
+      { id: "cc_ascension", label: "Ascension",         best: 40,   yours: 40   }
     ]
   },
   cd: {
-    label: "CD — Dégats de Crit", class: "cd", best_total: 255,
+    label: "CD — Dégats de Crit", cls: "cd", best_total: 255,
     rows: [
       { id: "cd_artefacts", label: "Artéfacts",        best: 142,  yours: 121.6 },
       { id: "cd_tour",      label: "Tour Infinie",      best: 15,   yours: 9     },
@@ -551,107 +411,113 @@ const DATA = {
       { id: "cd_reroll",    label: "Stat Re-roll",      best: 35,   yours: 35    },
       { id: "cd_arbre",     label: "Arbre de compét",  best: 25,   yours: 25    },
       { id: "cd_rush",      label: "Rush de boss",      best: 15,   yours: 15    },
-      { id: "cd_blessing",  label: "Blessing (B?)",    best: 7.5,  yours: 7.5   },
+      { id: "cd_blessing",  label: "Blessing (B?)",    best: 7.5,  yours: 7.5   }
     ]
   }
 };
 
 function loadSaved() {
   try {
-    const saved = JSON.parse(localStorage.getItem('stats_build') || '{}');
-    Object.values(DATA).forEach(cat => cat.rows.forEach(row => {
-      if (saved[row.id] !== undefined) row.yours = saved[row.id];
-    }));
+    var saved = JSON.parse(localStorage.getItem('stats_build') || '{}');
+    Object.keys(DATA).forEach(function(k) {
+      DATA[k].rows.forEach(function(row) {
+        if (saved[row.id] !== undefined) row.yours = saved[row.id];
+      });
+    });
   } catch(e) {}
 }
 
 function saveAll() {
-  const out = {};
-  Object.values(DATA).forEach(cat => cat.rows.forEach(row => {
-    const el = document.getElementById(row.id);
-    if (el) out[row.id] = parseFloat(el.value) || 0;
-  }));
+  var out = {};
+  Object.keys(DATA).forEach(function(k) {
+    DATA[k].rows.forEach(function(row) {
+      var el = document.getElementById(row.id);
+      if (el) out[row.id] = parseFloat(el.value) || 0;
+    });
+  });
   localStorage.setItem('stats_build', JSON.stringify(out));
-  const msg = document.getElementById('saveMsg');
+  var msg = document.getElementById('saveMsg');
   msg.classList.add('visible');
-  setTimeout(() => msg.classList.remove('visible'), 2000);
+  setTimeout(function() { msg.classList.remove('visible'); }, 2000);
   updateAll();
 }
 
 function resetAll() {
   if (!confirm('Réinitialiser toutes les valeurs ?')) return;
   localStorage.removeItem('stats_build');
-  Object.values(DATA).forEach(cat => cat.rows.forEach(row => {
-    const el = document.getElementById(row.id);
-    if (el) el.value = row.yours;
-  }));
+  Object.keys(DATA).forEach(function(k) {
+    DATA[k].rows.forEach(function(row) {
+      var el = document.getElementById(row.id);
+      if (el) el.value = row.yours;
+    });
+  });
   updateAll();
 }
 
 function getCardTotal(catKey) {
-  return DATA[catKey].rows.reduce((sum, row) => {
-    const el = document.getElementById(row.id);
-    return sum + (parseFloat(el?.value) || 0);
+  return DATA[catKey].rows.reduce(function(sum, row) {
+    var el = document.getElementById(row.id);
+    return sum + (parseFloat(el ? el.value : 0) || 0);
   }, 0);
 }
 
 function updateCard(catKey) {
-  const cat = DATA[catKey];
-  const yours = getCardTotal(catKey);
-  const missing = cat.best_total - yours;
-  const pct = Math.min(100, (yours / cat.best_total) * 100);
-  const t = document.getElementById(`${catKey}_total`);
-  const m = document.getElementById(`${catKey}_missing`);
-  const f = document.getElementById(`${catKey}_fill`);
-  const y = document.getElementById(`${catKey}_yours`);
-  if (t) t.textContent = `${yours.toFixed(1)}% / ${cat.best_total}%`;
-  if (y) y.textContent = `${yours.toFixed(1)}%`;
-  if (m) m.textContent = `${Math.max(0, missing).toFixed(1)}%`;
-  if (f) f.style.width = `${pct}%`;
+  var cat = DATA[catKey];
+  var yours = getCardTotal(catKey);
+  var missing = cat.best_total - yours;
+  var pct = Math.min(100, (yours / cat.best_total) * 100);
+  var t = document.getElementById(catKey + '_total');
+  var m = document.getElementById(catKey + '_missing');
+  var f = document.getElementById(catKey + '_fill');
+  var y = document.getElementById(catKey + '_yours');
+  if (t) t.textContent = yours.toFixed(1) + '% / ' + cat.best_total + '%';
+  if (y) y.textContent = yours.toFixed(1) + '%';
+  if (m) m.textContent = Math.max(0, missing).toFixed(1) + '%';
+  if (f) f.style.width = pct + '%';
 }
 
-function updateAll() { Object.keys(DATA).forEach(updateCard); }
+function updateAll() {
+  Object.keys(DATA).forEach(updateCard);
+}
 
 function buildCard(catKey) {
-  const cat = DATA[catKey];
-  const yours_total = cat.rows.reduce((s, r) => s + r.yours, 0);
-  const missing = cat.best_total - yours_total;
-  const pct = Math.min(100, (yours_total / cat.best_total) * 100);
-  const rows = cat.rows.map(row => `
-    <div class="row">
-      <span class="row-label">${row.label}</span>
-      <span class="row-best">${row.best}%</span>
-      <div class="input-wrap">
-        <input class="stat-input" type="number" id="${row.id}"
-          value="${row.yours}" min="0" max="999" step="0.1"
-          oninput="updateCard('${catKey}')">
-        <span class="pct-symbol">%</span>
-      </div>
-    </div>`).join('');
-  return `
-    <div class="card ${cat.class}">
-      <div class="card-header">
-        <div class="card-dot"></div>
-        <span class="card-title">${cat.label}</span>
-        <span class="card-total" id="${catKey}_total">${yours_total.toFixed(1)}% / ${cat.best_total}%</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="${catKey}_fill" style="width:${pct}%"></div></div>
-      <div class="card-body">
-        <div class="row" style="padding-top:10px;padding-bottom:2px">
-          <span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Catégorie</span>
-          <span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Meilleur</span>
-          <span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;width:90px;text-align:right;">Tes stats</span>
-        </div>
-        ${rows}
-        <div class="divider"></div>
-        <div class="summary-row yours"><span class="summary-label">Ton build</span><span class="summary-val" id="${catKey}_yours">${yours_total.toFixed(1)}%</span></div>
-        <div class="summary-row missing"><span class="summary-label">Manquant</span><span class="summary-val" id="${catKey}_missing">${Math.max(0, missing).toFixed(1)}%</span></div>
-      </div>
-    </div>`;
+  var cat = DATA[catKey];
+  var yours_total = cat.rows.reduce(function(s, r) { return s + r.yours; }, 0);
+  var missing = cat.best_total - yours_total;
+  var pct = Math.min(100, (yours_total / cat.best_total) * 100);
+  var rows = cat.rows.map(function(row) {
+    return '<div class="row">' +
+      '<span class="row-label">' + row.label + '</span>' +
+      '<span class="row-best">' + row.best + '%</span>' +
+      '<div class="input-wrap">' +
+        '<input class="stat-input" type="number" id="' + row.id + '" value="' + row.yours + '" min="0" max="999" step="0.1" oninput="updateCard(\'' + catKey + '\')">' +
+        '<span class="pct-symbol">%</span>' +
+      '</div></div>';
+  }).join('');
+  return '<div class="card ' + cat.cls + '">' +
+    '<div class="card-header">' +
+      '<div class="card-dot"></div>' +
+      '<span class="card-title">' + cat.label + '</span>' +
+      '<span class="card-total" id="' + catKey + '_total">' + yours_total.toFixed(1) + '% / ' + cat.best_total + '%</span>' +
+    '</div>' +
+    '<div class="progress-bar"><div class="progress-fill" id="' + catKey + '_fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="card-body">' +
+      '<div class="row" style="padding-top:10px;padding-bottom:2px">' +
+        '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Catégorie</span>' +
+        '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Meilleur</span>' +
+        '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;width:90px;text-align:right;">Tes stats</span>' +
+      '</div>' +
+      rows +
+      '<div class="divider"></div>' +
+      '<div class="summary-row yours"><span class="summary-label">Ton build</span><span class="summary-val" id="' + catKey + '_yours">' + yours_total.toFixed(1) + '%</span></div>' +
+      '<div class="summary-row missing"><span class="summary-label">Manquant</span><span class="summary-val" id="' + catKey + '_missing">' + Math.max(0, missing).toFixed(1) + '%</span></div>' +
+    '</div></div>';
 }
 
+// ── Init ──
 loadSaved();
 document.getElementById('grid').innerHTML = Object.keys(DATA).map(buildCard).join('');
+buildCodes();
 </script>
 </body>
 </html>
