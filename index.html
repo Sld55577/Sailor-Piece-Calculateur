@@ -192,6 +192,7 @@
   <div class="nav-tab active" onclick="showPage('stats', this)">Mes Stats</div>
   <div class="nav-tab" onclick="showPage('tierlist', this)">Tier List</div>
   <div class="nav-tab" onclick="showPage('codes', this)">Codes</div>
+  <div class="nav-tab" onclick="showPage('index', this)">Index</div>
 </nav>
 
 <!-- STATS PAGE -->
@@ -230,7 +231,7 @@
   </div>
   <div class="subtab-bar">
     <button class="subtab active" onclick="showSubpage('runes', this)">Runes</button>
-    <button class="subtab" onclick="showSubpage('sub2', this)">— à venir</button>
+    <button class="subtab" onclick="showSubpage('clans', this)">Clans</button>
     <button class="subtab" onclick="showSubpage('sub3', this)">— à venir</button>
     <button class="subtab" onclick="showSubpage('sub4', this)">— à venir</button>
     <button class="subtab" onclick="showSubpage('sub5', this)">— à venir</button>
@@ -308,7 +309,74 @@
       </div>
     </div>
   </div>
-  <div class="subpage" id="subpage-sub2"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
+  <div class="subpage" id="subpage-clans">
+    <div class="tierlist">
+      <div class="tier-row tier-S">
+        <div class="tier-label">S</div>
+        <div class="tier-items">
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#c0392b;background:#2a1515;">👑</div>
+            <div class="rune-name">Pride</div>
+          </div>
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#8e44ad;background:#1a0d25;">🌀</div>
+            <div class="rune-name">Alter</div>
+          </div>
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#f39c12;background:#2a2010;">⚡</div>
+            <div class="rune-name">Eminence</div>
+          </div>
+        </div>
+      </div>
+      <div class="tier-row tier-A">
+        <div class="tier-label">A</div>
+        <div class="tier-items">
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#2980b9;background:#0d1820;">🦋</div>
+            <div class="rune-name">Monarch</div>
+          </div>
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#27ae60;background:#102510;">🐐</div>
+            <div class="rune-name">Voldigoat</div>
+          </div>
+        </div>
+      </div>
+      <div class="tier-row tier-B">
+        <div class="tier-label">B</div>
+        <div class="tier-items">
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#5dade2;background:#0d1a25;">🌙</div>
+            <div class="rune-name">Mugetsu</div>
+          </div>
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#e74c3c;background:#251010;">⚔️</div>
+            <div class="rune-name">Espada</div>
+          </div>
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#e67e22;background:#251808;">🐉</div>
+            <div class="rune-name">Yamato</div>
+          </div>
+        </div>
+      </div>
+      <div class="tier-row tier-D">
+        <div class="tier-label">D</div>
+        <div class="tier-items">
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#95a5a6;background:#181c1f;">🕷️</div>
+            <div class="rune-name">Zoldyck</div>
+          </div>
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#f1c40f;background:#252010;">🌩️</div>
+            <div class="rune-name">Raikage</div>
+          </div>
+          <div class="rune-card">
+            <div class="rune-img-wrap" style="border-color:#922b21;background:#200d0d;">🗡️</div>
+            <div class="rune-name">Sasaki</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="subpage" id="subpage-sub3"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
   <div class="subpage" id="subpage-sub4"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
   <div class="subpage" id="subpage-sub5"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
@@ -323,6 +391,22 @@
     </div>
   </div>
   <div class="codes-grid" id="codes-grid"></div>
+</div>
+
+<!-- INDEX PAGE -->
+<div class="page" id="page-index">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Index <span>/ Référence</span></div>
+      <div class="last-update">Mis à jour le 2026-03-26</div>
+    </div>
+  </div>
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="placeholder">
+      <div class="placeholder-icon">📖</div>
+      <div class="placeholder-text">Contenu à venir</div>
+    </div>
+  </div>
 </div>
 
 <script>
