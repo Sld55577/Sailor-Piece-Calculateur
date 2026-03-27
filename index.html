@@ -15,6 +15,7 @@
     --accent-dmg: #f97316;
     --accent-cc: #a78bfa;
     --accent-cd: #34d399;
+    --accent-art: #e2c87a;
     --input-bg: #1e2028;
     --input-focus: #252830;
     --good: #34d399;
@@ -166,6 +167,14 @@
   .card.cd .card-title { color: var(--accent-cd); opacity: 0.9; }
   .card.cd .progress-fill { background: var(--accent-cd); }
   .card.cd .stat-input:focus { border-color: var(--accent-cd); box-shadow: 0 0 0 2px rgba(52,211,153,0.08); }
+  .card.art .card-dot { background: var(--accent-art); }
+  .card.art .card-title { color: var(--accent-art); opacity: 0.9; }
+  .card.art .progress-fill { background: var(--accent-art); }
+  .card.art .stat-input:focus { border-color: var(--accent-art); box-shadow: 0 0 0 2px rgba(226,200,122,0.08); }
+  /* Artefact section divider */
+  .section-divider { max-width: 1100px; margin: 40px auto 28px; display: flex; align-items: center; gap: 16px; }
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .section-divider-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
   .actions { max-width: 1100px; margin: 0 auto; display: flex; justify-content: flex-end; gap: 12px; }
   .btn { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; padding: 10px 22px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
   .btn-ghost { background: transparent; color: var(--muted); }
@@ -199,6 +208,16 @@
     </div>
   </div>
   <div class="grid" id="grid"></div>
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">⚔️ Artéfacts</div>
+    <div class="section-divider-line"></div>
+  </div>
+  <div class="grid" id="grid-art"></div>
+  <div style="max-width:1100px;margin:18px auto 0;padding:12px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;">
+    <span style="font-size:1rem;">ℹ️</span>
+    <span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);">Il est impossible d'avoir la même statistique secondaire que celle qui est déjà principale.</span>
+  </div>
 </div>
 
 <!-- TIER LIST PAGE -->
@@ -381,14 +400,25 @@ var DATA = {
     ]
   },
   cc: {
-    label: "CC — Chance de Crit", cls: "cc", best_total: 107,
+    label: "CC — Chance de Crit", cls: "cc", best_total: 318,
     rows: [
       { id: "cc_artefact",  label: "Artéfact",         best: 79.6, yours: 73   },
       { id: "cc_tour",      label: "Tour Infinie",      best: 5,    yours: 0    },
       { id: "cc_rush",      label: "Rush de boss",      best: 5,    yours: 0    },
       { id: "cc_reroll",    label: "Stat reroll",       best: 7,    yours: 5    },
       { id: "cc_arbre",     label: "Arbre de compét",  best: 5,    yours: 5    },
-      { id: "cc_blessing",  label: "Blessing (B?)",    best: 5,    yours: 5     }
+      { id: "cc_blessing",  label: "Blessing (B?)",    best: 5,    yours: 5    },
+      { id: "cc_titre",     label: "Titre",             best: 50,   yours: 40   },
+      { id: "cc_tour2",     label: "Tour Infinie",      best: 5,    yours: 0    },
+      { id: "cc_rush2",     label: "Rush de boss",      best: 5,    yours: 0    },
+      { id: "cc_arbre2",    label: "Arbre de compét",  best: 25,   yours: 20   },
+      { id: "cc_runes",     label: "Runes",             best: 28,   yours: 25.9 },
+      { id: "cc_reroll2",   label: "Stat Re-roll",      best: 12,   yours: 10   },
+      { id: "cc_specpass",  label: "Spec passive",      best: 15,   yours: 14.6 },
+      { id: "cc_base",      label: "Base",              best: 100,  yours: 100  },
+      { id: "cc_race",      label: "Race",              best: 25,   yours: 25   },
+      { id: "cc_clan",      label: "Clan",              best: 12.5, yours: 12.5 },
+      { id: "cc_ascension", label: "Ascension",         best: 40,   yours: 40   }
     ]
   },
   cd: {
@@ -422,6 +452,16 @@ function saveAll() {
     DATA[k].rows.forEach(function(row) {
       var el = document.getElementById(row.id);
       if (el) out[row.id] = parseFloat(el.value) || 0;
+    });
+  });
+  ART_PIECES.forEach(function(piece) {
+    var mainId = 'art_' + piece.key + '_' + piece.mainStat.id;
+    var mainEl = document.getElementById(mainId);
+    if (mainEl) out[mainId] = parseFloat(mainEl.value) || 0;
+    piece.subStats.forEach(function(stat) {
+      var rowId = 'art_' + piece.key + '_' + stat.id;
+      var el = document.getElementById(rowId);
+      if (el) out[rowId] = parseFloat(el.value) || 0;
     });
   });
   localStorage.setItem('stats_build', JSON.stringify(out));
@@ -503,9 +543,153 @@ function buildCard(catKey) {
     '</div></div>';
 }
 
+// ── Artefact Data ──
+// Each piece: mainStat = { label, best }, subStats = [{ id, label, best }]
+var ART_PIECES = [
+  {
+    key: "tete", label: "Tête", icon: "🪖",
+    mainStat: { id: "main", label: "HP %", best: 33.1 },
+    subStats: [
+      { id: "cc",      label: "Crit Chance",   best: 10.5, important: true  },
+      { id: "cd",      label: "Crit DMG",      best: 18,   important: true  },
+      { id: "dmg",     label: "DMG",           best: 9,    important: true  },
+      { id: "dmgred",  label: "DMG Reduction", best: 4                      },
+      { id: "hpregen", label: "HP Regen",      best: 15                     }
+    ]
+  },
+  {
+    key: "plastron", label: "Plastron", icon: "🛡️",
+    mainStat: { id: "main", label: "Crit Chance / Crit DMG", best: 30.6, best2: 59.7 },
+    subStats: [
+      { id: "cccd",    label: "Crit Chance / Crit DMG", best: 10.5, best2: 18, important: true },
+      { id: "dmg",     label: "DMG",           best: 9,    important: true  },
+      { id: "hp",      label: "HP %",          best: 15                     },
+      { id: "dmgred",  label: "DMG Reduction", best: 4                      },
+      { id: "hpregen", label: "HP Regen",      best: 15                     }
+    ]
+  },
+  {
+    key: "glove", label: "Glove", icon: "🥊",
+    mainStat: { id: "main", label: "DMG %", best: 27.9 },
+    subStats: [
+      { id: "cc",      label: "Crit Chance",   best: 10.5, important: true  },
+      { id: "cd",      label: "Crit DMG",      best: 18,   important: true  },
+      { id: "hp",      label: "HP %",          best: 15                     },
+      { id: "dmgred",  label: "DMG Reduction", best: 4                      },
+      { id: "hpregen", label: "HP Regen",      best: 15                     }
+    ]
+  },
+  {
+    key: "bottes", label: "Bottes", icon: "👟",
+    mainStat: { id: "main", label: "DMG %", best: 27.9 },
+    subStats: [
+      { id: "cc",      label: "Crit Chance",   best: 10.5, important: true  },
+      { id: "cd",      label: "Crit DMG",      best: 18,   important: true  },
+      { id: "hp",      label: "HP %",          best: 15                     },
+      { id: "dmgred",  label: "DMG Reduction", best: 4                      },
+      { id: "hpregen", label: "HP Regen",      best: 15                     }
+    ]
+  }
+];
+
+function artRowHtml(piece, stat, isMain) {
+  var rowId = 'art_' + piece.key + '_' + stat.id;
+  var missId = 'miss_' + rowId;
+  var badge = '';
+  if (!isMain) {
+    if (stat.important) {
+      badge = '<span style="font-family:\'DM Mono\',monospace;font-size:0.62rem;font-weight:600;color:#7eb8d4;margin-left:6px;letter-spacing:0.03em;">important</span>';
+    } else {
+      badge = '<span style="font-family:\'DM Mono\',monospace;font-size:0.62rem;font-weight:500;color:#7a7f90;margin-left:6px;letter-spacing:0.03em;">remplaçable</span>';
+    }
+  }
+  var labelStr = isMain
+    ? '<span class="row-label" style="color:var(--accent-art);font-weight:700;">' + stat.label + '</span>'
+    : '<span class="row-label" style="display:flex;align-items:center;">' + stat.label + badge + '</span>';
+  var bestLabel = stat.best2
+    ? stat.best + '% / ' + stat.best2 + '%'
+    : stat.best + '%';
+  return '<div class="row art-row">' +
+    labelStr +
+    '<span class="art-missing-val" id="' + missId + '" style="font-family:\'DM Mono\',monospace;font-size:0.72rem;color:var(--bad);min-width:44px;text-align:right;">—</span>' +
+    '<div class="input-wrap">' +
+      '<input class="stat-input" type="number" id="' + rowId + '" value="0" min="0" max="999" step="0.1" ' +
+        'oninput="updateArtRow(\'' + piece.key + '\',\'' + stat.id + '\',' + stat.best + ')">' +
+      '<span class="pct-symbol">%</span>' +
+    '</div></div>';
+}
+
+function buildArtCard(piece) {
+  var mainRow = artRowHtml(piece, piece.mainStat, true);
+  var subHeader = '<div class="divider" style="margin:6px 24px 2px"></div>' +
+    '<div class="row" style="padding-top:4px;padding-bottom:2px">' +
+      '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--muted);font-weight:700;text-transform:uppercase;">Sous-stats</span>' +
+      '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--bad);font-weight:700;text-transform:uppercase;min-width:44px;text-align:right;">Manquant</span>' +
+      '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--muted);font-weight:700;text-transform:uppercase;width:90px;text-align:right;">Tes stats</span>' +
+    '</div>';
+  var subRows = piece.subStats.map(function(stat) { return artRowHtml(piece, stat, false); }).join('');
+
+  return '<div class="card art">' +
+    '<div class="card-header">' +
+      '<div class="card-dot"></div>' +
+      '<span class="card-title">' + piece.icon + ' ' + piece.label + '</span>' +
+    '</div>' +
+    '<div class="card-body">' +
+      '<div class="row" style="padding-top:10px;padding-bottom:2px">' +
+        '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--accent-art);font-weight:700;text-transform:uppercase;">Stat principale</span>' +
+        '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--bad);font-weight:700;text-transform:uppercase;min-width:44px;text-align:right;">Manquant</span>' +
+        '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--muted);font-weight:700;text-transform:uppercase;width:90px;text-align:right;">Tes stats</span>' +
+      '</div>' +
+      mainRow +
+      subHeader +
+      subRows +
+    '</div></div>';
+}
+
+function updateArtRow(pieceKey, statId, best) {
+  var rowId = 'art_' + pieceKey + '_' + statId;
+  var missId = 'miss_' + rowId;
+  var el = document.getElementById(rowId);
+  var missEl = document.getElementById(missId);
+  if (!el || !missEl) return;
+  var val = parseFloat(el.value) || 0;
+  var missing = best - val;
+  if (missing <= 0) {
+    missEl.textContent = '✓';
+    missEl.style.color = 'var(--good)';
+  } else {
+    missEl.textContent = '-' + missing.toFixed(1) + '%';
+    missEl.style.color = 'var(--bad)';
+  }
+}
+
+function buildArtGrid() {
+  var grid = document.getElementById('grid-art');
+  if (!grid) return;
+  grid.innerHTML = ART_PIECES.map(buildArtCard).join('');
+  try {
+    var saved = JSON.parse(localStorage.getItem('stats_build') || '{}');
+    ART_PIECES.forEach(function(piece) {
+      // main stat
+      var mainId = 'art_' + piece.key + '_' + piece.mainStat.id;
+      var mainEl = document.getElementById(mainId);
+      if (mainEl && saved[mainId] !== undefined) { mainEl.value = saved[mainId]; }
+      updateArtRow(piece.key, piece.mainStat.id, piece.mainStat.best);
+      // sub stats
+      piece.subStats.forEach(function(stat) {
+        var rowId = 'art_' + piece.key + '_' + stat.id;
+        var el = document.getElementById(rowId);
+        if (el && saved[rowId] !== undefined) { el.value = saved[rowId]; }
+        updateArtRow(piece.key, stat.id, stat.best);
+      });
+    });
+  } catch(e) {}
+}
+
 // ── Init ──
 loadSaved();
 document.getElementById('grid').innerHTML = Object.keys(DATA).map(buildCard).join('');
+buildArtGrid();
 buildCodes();
 </script>
 </body>
