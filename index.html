@@ -208,16 +208,30 @@
       <button class="btn btn-primary" onclick="saveAll()">Sauvegarder</button>
     </div>
   </div>
-  <div class="grid" id="grid"></div>
-  <div class="section-divider">
-    <div class="section-divider-line"></div>
-    <div class="section-divider-label">⚔️ Artéfacts</div>
-    <div class="section-divider-line"></div>
+
+  <div class="subtab-bar">
+    <button class="subtab active" onclick="showStatsSubpage('stats-main', this)">⚔️ Stats</button>
+    <button class="subtab" onclick="showStatsSubpage('stats-art', this)">🏺 Artéfacts</button>
+    <button class="subtab" onclick="showStatsSubpage('stats-luck', this)">🍀 Luck</button>
   </div>
-  <div class="grid" id="grid-art"></div>
-  <div style="max-width:1100px;margin:18px auto 0;padding:12px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;">
-    <span style="font-size:1rem;">ℹ️</span>
-    <span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);">Il est impossible d'avoir la même statistique secondaire que celle qui est déjà principale.</span>
+
+  <!-- Sous-page Stats principales -->
+  <div class="subpage active" id="statsub-stats-main">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- Sous-page Artéfacts -->
+  <div class="subpage" id="statsub-stats-art">
+    <div class="grid" id="grid-art"></div>
+    <div style="max-width:1100px;margin:18px auto 0;padding:12px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1rem;">ℹ️</span>
+      <span style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);">Il est impossible d'avoir la même statistique secondaire que celle qui est déjà principale.</span>
+    </div>
+  </div>
+
+  <!-- Sous-page Luck -->
+  <div class="subpage" id="statsub-stats-luck">
+    <div class="grid" id="grid-luck"></div>
   </div>
 </div>
 
@@ -459,6 +473,14 @@ function copyCode(code, i) {
   });
 }
 
+// ── Stats subpage navigation ──
+function showStatsSubpage(id, el) {
+  document.querySelectorAll('#page-stats .subpage').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('#page-stats .subtab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('statsub-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
 // ── Stats ──
 var DATA = {
   dmg: {
@@ -548,6 +570,12 @@ function saveAll() {
       if (el) out[rowId] = parseFloat(el.value) || 0;
     });
   });
+  Object.keys(LUCK_DATA).forEach(function(k) {
+    LUCK_DATA[k].rows.forEach(function(row) {
+      var el = document.getElementById(row.id);
+      if (el) out[row.id] = parseFloat(el.value) || 0;
+    });
+  });
   localStorage.setItem('stats_build', JSON.stringify(out));
   var msg = document.getElementById('saveMsg');
   msg.classList.add('visible');
@@ -564,7 +592,14 @@ function resetAll() {
       if (el) el.value = row.yours;
     });
   });
+  Object.keys(LUCK_DATA).forEach(function(k) {
+    LUCK_DATA[k].rows.forEach(function(row) {
+      var el = document.getElementById(row.id);
+      if (el) el.value = 0;
+    });
+  });
   updateAll();
+  Object.keys(LUCK_DATA).forEach(updateLuckCard);
 }
 
 function getCardTotal(catKey) {
@@ -770,10 +805,140 @@ function buildArtGrid() {
   } catch(e) {}
 }
 
+// ── Luck Data ──
+var luckGamepass = false;
+
+var LUCK_DATA = {
+  luck: {
+    label: "LUCK — Chance", cls: "cc",
+    best_base: 337.5,
+    best_gp: 675,
+    rows: [
+      { id: "luck_titre",      label: "Titre",            best: 50,   yours: 50   },
+      { id: "luck_tour",       label: "Tour Infinie",     best: 15,   yours: 15   },
+      { id: "luck_rush",       label: "Rush de boss",     best: 15,   yours: 15   },
+      { id: "luck_arbre",      label: "Arbre de compét",  best: 25,   yours: 25   },
+      { id: "luck_runes",      label: "Rune",             best: 28,   yours: 28   },
+      { id: "luck_reroll",     label: "Stat Re-roll",     best: 12,   yours: 12   },
+      { id: "luck_specpass",   label: "Spec passive",     best: 15,   yours: 15   },
+      { id: "luck_base",       label: "Base",             best: 100,  yours: 100  },
+      { id: "luck_race",       label: "Race",             best: 25,   yours: 25   },
+      { id: "luck_clan",       label: "Clan",             best: 12.5, yours: 12.5 },
+      { id: "luck_ascension",  label: "Ascension",        best: 40,   yours: 40   }
+    ]
+  }
+};
+
+function toggleLuckGamepass() {
+  luckGamepass = !luckGamepass;
+  var btn = document.getElementById('luck-gp-btn');
+  if (btn) {
+    if (luckGamepass) {
+      btn.textContent = '2x Luck GP : ON';
+      btn.style.color = 'var(--good)';
+      btn.style.borderColor = 'var(--good)';
+    } else {
+      btn.textContent = '2x Luck GP : OFF';
+      btn.style.color = 'var(--muted)';
+      btn.style.borderColor = 'var(--border)';
+    }
+  }
+  Object.keys(LUCK_DATA).forEach(updateLuckCard);
+}
+
+function buildLuckGrid() {
+  var grid = document.getElementById('grid-luck');
+  if (!grid) return;
+  // Inject gamepass toggle above the grid
+  grid.innerHTML = '';
+  var toggleBar = document.createElement('div');
+  toggleBar.style.cssText = 'max-width:1100px;margin:0 auto 20px;display:flex;align-items:center;gap:14px;';
+  toggleBar.innerHTML =
+    '<span style="font-family:\'DM Mono\',monospace;font-size:0.78rem;color:var(--muted);">Gamepass :</span>' +
+    '<button id="luck-gp-btn" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 16px;border-radius:8px;transition:all 0.2s;" onclick="toggleLuckGamepass()">2x Luck GP : OFF</button>' +
+    '<span style="font-family:\'DM Mono\',monospace;font-size:0.72rem;color:var(--muted);">Active le x2 pour voir le max avec gamepass (675%)</span>';
+  grid.appendChild(toggleBar);
+  var cardWrap = document.createElement('div');
+  cardWrap.className = 'grid';
+  cardWrap.id = 'grid-luck-cards';
+  cardWrap.innerHTML = Object.keys(LUCK_DATA).map(buildLuckCard).join('');
+  grid.appendChild(cardWrap);
+  try {
+    var saved = JSON.parse(localStorage.getItem('stats_build') || '{}');
+    Object.keys(LUCK_DATA).forEach(function(k) {
+      LUCK_DATA[k].rows.forEach(function(row) {
+        if (saved[row.id] !== undefined) {
+          var el = document.getElementById(row.id);
+          if (el) el.value = saved[row.id];
+        }
+      });
+    });
+  } catch(e) {}
+  Object.keys(LUCK_DATA).forEach(updateLuckCard);
+}
+
+function buildLuckCard(catKey) {
+  var cat = LUCK_DATA[catKey];
+  var best_total = luckGamepass ? cat.best_gp : cat.best_base;
+  var yours_total = cat.rows.reduce(function(s, r) { return s + r.yours; }, 0);
+  var missing = best_total - yours_total;
+  var pct = Math.min(100, (yours_total / best_total) * 100);
+  var rows = cat.rows.map(function(row) {
+    return '<div class="row">' +
+      '<span class="row-label">' + row.label + '</span>' +
+      '<span class="row-best">' + row.best + '%</span>' +
+      '<div class="input-wrap">' +
+        '<input class="stat-input" type="number" id="' + row.id + '" value="' + row.yours + '" min="0" max="999" step="0.1" oninput="updateLuckCard(\'' + catKey + '\')">' +
+        '<span class="pct-symbol">%</span>' +
+      '</div></div>';
+  }).join('');
+  var gpLabel = luckGamepass
+    ? '<span style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--good);margin-left:8px;letter-spacing:0.03em;">×2 GP</span>'
+    : '';
+  return '<div class="card ' + cat.cls + '">' +
+    '<div class="card-header">' +
+      '<div class="card-dot"></div>' +
+      '<span class="card-title">' + cat.label + gpLabel + '</span>' +
+      '<span class="card-total" id="luck_' + catKey + '_total">' + yours_total.toFixed(1) + '% / ' + best_total + '%</span>' +
+    '</div>' +
+    '<div class="progress-bar"><div class="progress-fill" id="luck_' + catKey + '_fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="card-body">' +
+      '<div class="row" style="padding-top:10px;padding-bottom:2px">' +
+        '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Catégorie</span>' +
+        '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Meilleur</span>' +
+        '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;width:90px;text-align:right;">Tes stats</span>' +
+      '</div>' +
+      rows +
+      '<div class="divider"></div>' +
+      '<div class="summary-row yours"><span class="summary-label">Ton build</span><span class="summary-val" id="luck_' + catKey + '_yours">' + yours_total.toFixed(1) + '%</span></div>' +
+      '<div class="summary-row missing"><span class="summary-label">Manquant</span><span class="summary-val" id="luck_' + catKey + '_missing">' + Math.max(0, missing).toFixed(1) + '%</span></div>' +
+    '</div></div>';
+}
+
+function updateLuckCard(catKey) {
+  var cat = LUCK_DATA[catKey];
+  var best_total = luckGamepass ? cat.best_gp : cat.best_base;
+  var yours = cat.rows.reduce(function(sum, row) {
+    var el = document.getElementById(row.id);
+    return sum + (parseFloat(el ? el.value : 0) || 0);
+  }, 0);
+  var missing = best_total - yours;
+  var pct = Math.min(100, (yours / best_total) * 100);
+  var t = document.getElementById('luck_' + catKey + '_total');
+  var m = document.getElementById('luck_' + catKey + '_missing');
+  var f = document.getElementById('luck_' + catKey + '_fill');
+  var y = document.getElementById('luck_' + catKey + '_yours');
+  if (t) t.textContent = yours.toFixed(1) + '% / ' + best_total + '%';
+  if (y) y.textContent = yours.toFixed(1) + '%';
+  if (m) m.textContent = Math.max(0, missing).toFixed(1) + '%';
+  if (f) f.style.width = pct + '%';
+}
+
 // ── Init ──
 loadSaved();
 document.getElementById('grid').innerHTML = Object.keys(DATA).map(buildCard).join('');
 buildArtGrid();
+buildLuckGrid();
 buildCodes();
 </script>
 </body>
