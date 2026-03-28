@@ -1126,18 +1126,121 @@ var BUILDS = {
   },
   luck: {
     title: "Best Luck Build",
-    tag: "À venir",
-    tagCls: "tag-b",
+    tag: "META",
+    tagCls: "tag-meta",
     sections: [
-      { heading: "", rows: [{ label: "Statut", value: "Contenu à venir" }] }
+      {
+        heading: "Équipement",
+        rows: [
+          { label: "Meilleure Rune",       value: "Radiant Rune" },
+          { label: "Meilleur Trait",        value: "Emperor" },
+          { label: "Meilleur Artéfact",     value: "Abyssal Crown Set (Legendary)" },
+          { label: "Meilleure Épée",        value: "Atomic" },
+          { label: "Meilleure Mêlée",       value: "Strongest Shinobi" },
+          { label: "Meilleur Fruit",        value: "Light / Quake" },
+          { label: "Meilleur Accesoire",    value: "Atomic Outfit" }
+        ]
+      },
+      {
+        heading: "Stats d'Artéfact",
+        note: "Main stat: CD, DMG, CC",
+        rows: [
+          { label: "Substat 1", value: "CD - Crit Damage" },
+          { label: "Substat 2", value: "CC — Critical Chance" },
+          { label: "Substat 3", value: "DMG — Damage" }
+        ]
+      },
+      {
+        heading: "Progressions à Max",
+        rows: [
+          { label: "Arbre de compétences",    value: "490 SP" },
+          { label: "Rush de boss",             value: "Max" },
+          { label: "Tour Infinie",             value: "Max" },
+          { label: "Spec Passives",            value: "Berserker / Executioner" },
+          { label: "Haki",                     value: "Level 100" },
+          { label: "Observation Haki",         value: "Level 50" },
+          { label: "Haki du Conquérant",       value: "Level 35" },
+          { label: "Stat de Rune",             value: "Level 60" },
+          { label: "Blessing",                 value: "Fortune Chosen (Max Stat)" },
+          { label: "Ascension",                value: "VIII (8)" }
+        ]
+      },
+      {
+        heading: "Race & Clan",
+        rows: [
+          { label: "Meilleure Race",  value: "Kitsune (Mythical) " },
+          { label: "→ Luck",     value: "Kitsune" },
+          { label: "Meilleur Clan",  value: "Eminence" },
+          { label: "→ Eminence", value: "Purement pour le farming / luck" }
+        ]
+      },
+      {
+        heading: "Titres & Stats",
+        rows: [
+          { label: "Meilleur Titre Luck", value: "Celestial Favor (+50% Luck)" },
+          { label: "Meilleures Stats",    value: "Z ou SSS sur tout" }
+        ]
+      }
     ]
   },
   melee: {
     title: "Best Mêlée Build",
-    tag: "À venir",
-    tagCls: "tag-b",
+    tag: "META",
+    tagCls: "tag-meta",
     sections: [
-      { heading: "", rows: [{ label: "Statut", value: "Contenu à venir" }] }
+      {
+        heading: "Équipement",
+        rows: [
+          { label: "Meilleure Rune",       value: "Primordial Rune" },
+          { label: "Meilleur Trait",        value: "Emperor" },
+          { label: "Meilleur Artéfact",     value: "Abyssal Crown Set (Legendary)" },
+          { label: "Meilleure Épée",        value: "Atomic" },
+          { label: "Meilleure Mêlée",       value: "Strongest Shinobi" },
+          { label: "Meilleur Fruit",        value: "Light / Quake" },
+          { label: "Meilleur Accesoire",    value: "Atomic Outfit" }
+        ]
+      },
+      {
+        heading: "Stats d'Artéfact",
+        note: "Main stat: CD, CC ou DMG",
+        rows: [
+          { label: "Substat 1", value: "CC — Critical Chance" },
+          { label: "Substat 2", value: "CD — Critical Damage" },
+          { label: "Substat 3", value: "DMG — Damage" }
+        ]
+      },
+      {
+        heading: "Progressions à Max",
+        rows: [
+          { label: "Arbre de compétences",    value: "490 SP" },
+          { label: "Rush de boss",             value: "Max" },
+          { label: "Tour Infinie",             value: "Max" },
+          { label: "Spec Passives",            value: "Berserker / Executioner" },
+          { label: "Haki",                     value: "Level 100" },
+          { label: "Observation Haki",         value: "Level 50" },
+          { label: "Haki du Conquérant",       value: "Level 35" },
+          { label: "Stat de Rune",             value: "Level 60" },
+          { label: "Blessing",                 value: "Berserker (Max Stat)" },
+          { label: "Ascension",                value: "VIII (8)" }
+        ]
+      },
+      {
+        heading: "Race & Clan",
+        rows: [
+          { label: "Meilleure Race",  value: "Warlord (Mythical) — 0.05%" },
+          { label: "→ Melee",    value: "Warlord" },
+          { label: "Meilleur Clan",  value: "Pride ou Alter" },
+          { label: "→ Pride",    value: "Purement pour les dégâts max" },
+          { label: "→ Eminence", value: "Purement pour les dps max" }
+        ]
+      },
+      {
+        heading: "Titres & Stats",
+        rows: [
+          { label: "Meilleur Titre DMG", value: "Eminence Incarnate (+82.5% DMG)" },
+          { label: "Meilleures Stats",   value: "Z ou SSS sur tout" }
+        ]
+      }
     ]
   }
 };
