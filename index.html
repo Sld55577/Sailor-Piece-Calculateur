@@ -183,6 +183,29 @@
   .btn-primary:hover { opacity: 0.85; }
   .save-msg { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--good); align-self: center; opacity: 0; transition: opacity 0.3s; }
   .save-msg.visible { opacity: 1; }
+  /* BUILDS PAGE */
+  .build-tab { display: none; }
+  .build-tab.active { display: block; }
+  .builds-grid { max-width: 800px; margin: 0 auto; }
+  .build-detail-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .build-detail-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .build-detail-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.01em; }
+  .build-tag { font-family: 'DM Mono', monospace; font-size: 0.72rem; padding: 4px 10px; border-radius: 6px; font-weight: 700; }
+  .tag-s { background: rgba(249,115,22,0.15); color: #f97316; }
+  .tag-a { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .tag-b { background: rgba(107,112,128,0.15); color: var(--muted); }
+  .tag-meta { background: rgba(226,200,122,0.15); color: var(--accent-art); }
+  .build-detail-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0; }
+  .build-section { padding: 18px 24px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .build-section:last-child { border-bottom: none; }
+  .build-section-heading { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-art); margin-bottom: 10px; }
+  .build-section-note { font-size: 0.72rem; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 8px; font-style: italic; }
+  .build-detail-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 5px 0; border-bottom: 1px solid rgba(37,40,48,0.6); }
+  .build-detail-row:last-child { border-bottom: none; }
+  .build-detail-sub { padding-left: 12px; }
+  .build-detail-sub .build-detail-label { color: var(--muted); font-size: 0.78rem; }
+  .build-detail-label { font-size: 0.82rem; color: #c0c4d0; font-weight: 600; white-space: nowrap; }
+  .build-detail-val { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text); text-align: right; }
 </style>
 </head>
 <body>
@@ -190,6 +213,7 @@
 <nav class="top-nav">
   <div class="nav-logo">Sailor Piece <span>/ Build Tracker</span></div>
   <div class="nav-tab active" onclick="showPage('stats', this)">Mes Stats</div>
+  <div class="nav-tab" onclick="showPage('builds', this)">Meilleur Builds</div>
   <div class="nav-tab" onclick="showPage('tierlist', this)">Tier List</div>
   <div class="nav-tab" onclick="showPage('codes', this)">Codes</div>
   <div class="nav-tab" onclick="showPage('index', this)">Index</div>
@@ -200,7 +224,7 @@
   <div class="stats-header">
     <div>
       <div class="site-title">Mes Stats <span>/ Build Tracker</span></div>
-      <div class="last-update">Mis à jour le 2026-03-27</div>
+      <div class="last-update">Mis à jour le 2026-03-26</div>
     </div>
     <div class="actions" style="margin:0">
       <span class="save-msg" id="saveMsg">✓ Sauvegardé</span>
@@ -236,6 +260,36 @@
 </div>
 
 <!-- TIER LIST PAGE -->
+<!-- BUILDS PAGE -->
+<div class="page" id="page-builds">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Meilleur Builds <span>/ Classement</span></div>
+      <div class="last-update">Mis à jour le 2026-03-26</div>
+    </div>
+  </div>
+
+  <div class="subtab-bar" style="max-width:1100px;margin:0 auto 32px;display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="subtab active" onclick="showBuildTab('sword', this)">⚔️ Sword</button>
+    <button class="subtab" onclick="showBuildTab('luck', this)">🍀 Luck</button>
+    <button class="subtab" onclick="showBuildTab('melee', this)">🥊 Mêlée</button>
+  </div>
+
+  <!-- SWORD -->
+  <div class="build-tab active" id="buildtab-sword">
+    <div class="builds-grid" id="builds-sword"></div>
+  </div>
+  <!-- LUCK -->
+  <div class="build-tab" id="buildtab-luck">
+    <div class="builds-grid" id="builds-luck"></div>
+  </div>
+  <!-- MELEE -->
+  <div class="build-tab" id="buildtab-melee">
+    <div class="builds-grid" id="builds-melee"></div>
+  </div>
+</div>
+
+<!-- TIERLIST PAGE -->
 <div class="page" id="page-tierlist">
   <div class="section-header">
     <div>
@@ -246,7 +300,7 @@
   <div class="subtab-bar">
     <button class="subtab active" onclick="showSubpage('runes', this)">Runes</button>
     <button class="subtab" onclick="showSubpage('clans', this)">Clans</button>
-    <button class="subtab" onclick="showSubpage('sub3', this)">— à venir</button>
+    <button class="subtab" onclick="showSubpage('accessoires', this)">Accesoires</button>
     <button class="subtab" onclick="showSubpage('sub4', this)">— à venir</button>
     <button class="subtab" onclick="showSubpage('sub5', this)">— à venir</button>
   </div>
@@ -391,6 +445,75 @@
       </div>
     </div>
   </div>
+  <div class="subpage" id="subpage-accessoires">
+    <div class="tierlist">
+
+      <div class="tier-row" style="border-color:#ff69b4;">
+        <div class="tier-label" style="background:#ff69b4;color:#fff;">Sailor</div>
+        <div class="tier-items">
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e74c3c;background:#251010;">👘<span class="rune-count">x8</span></div><div class="rune-name">Atomic Outfit</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#5dade2;background:#0d1a25;">🥼<span class="rune-count">x2</span></div><div class="rune-name">Abyssal Outfit</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#8e44ad;background:#1a0d25;">🧥</div><div class="rune-name">Alter Armor [E5]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#2c3e50;background:#0d0f14;">🪖</div><div class="rune-name">Imperialoutfit [?]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#5dade2;background:#0d1a25;">👗</div><div class="rune-name">Maiden Outfit [E10]</div></div>
+        </div>
+      </div>
+
+      <div class="tier-row tier-S">
+        <div class="tier-label">S</div>
+        <div class="tier-items">
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#2c3e50;background:#0d0f14;">🧥</div><div class="rune-name">Imperial Outfit [Lin]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#f39c12;background:#2a2010;">🛡️</div><div class="rune-name">Sun Armor</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#8e44ad;background:#1a0d25;">🟣<span class="rune-count">x4</span></div><div class="rune-name">Manitu Armor [?4]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#ecf0f1;background:#1a1c22;">⚪</div><div class="rune-name">Arms Outfit [E5]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#f39c12;background:#2a2010;">⚜️</div><div class="rune-name">Gilgamesh Armor</div></div>
+        </div>
+      </div>
+
+      <div class="tier-row tier-A">
+        <div class="tier-label">A</div>
+        <div class="tier-items">
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#5dade2;background:#0d1a25;">🦇<span class="rune-count">x10</span></div><div class="rune-name">Slime Wings [E4]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#f39c12;background:#2a2010;">⚙️<span class="rune-count">x83</span></div><div class="rune-name">Divine Wheel [E5]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#ecf0f1;background:#1a1c22;">🪽<span class="rune-count">x19</span></div><div class="rune-name">Ultimate Wings [E5]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#ecf0f1;background:#1a1c22;">🥋<span class="rune-count">x44</span></div><div class="rune-name">Gojo Haori [E3]</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#8e44ad;background:#1a0d25;">🦇<span class="rune-count">x20</span></div><div class="rune-name">Shadow Cloak</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e74c3c;background:#251010;">🪽</div><div class="rune-name">Heart Wings</div></div>
+        </div>
+      </div>
+
+      <div class="tier-row tier-B">
+        <div class="tier-label">B</div>
+        <div class="tier-items">
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#ecf0f1;background:#1a1c22;">🥋<span class="rune-count">x9</span></div><div class="rune-name">Aizen Haori</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e67e22;background:#251808;">💀<span class="rune-count">x82</span></div><div class="rune-name">Hollow Mask</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#922b21;background:#200d0d;">🧥<span class="rune-count">x12</span></div><div class="rune-name">Alucard Coat</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#5dade2;background:#0d1a25;">❄️</div><div class="rune-name">Ragna Sigil</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e74c3c;background:#251010;">🗡️<span class="rune-count">x2</span></div><div class="rune-name">Qin Shi Blindfold</div></div>
+        </div>
+      </div>
+
+      <div class="tier-row tier-C">
+        <div class="tier-label">C</div>
+        <div class="tier-items">
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#2c3e50;background:#0d0f14;">🦸</div><div class="rune-name">Jinwoo Cape</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e74c3c;background:#251010;">📿<span class="rune-count">x4</span></div><div class="rune-name">Sukuna Collar</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#2c3e50;background:#0d0f14;">🕶️<span class="rune-count">x12</span></div><div class="rune-name">Gojo Blindfold</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e74c3c;background:#251010;">❤️</div><div class="rune-name">Valentine Heart</div></div>
+        </div>
+      </div>
+
+      <div class="tier-row tier-D">
+        <div class="tier-label">D</div>
+        <div class="tier-items">
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e91e8c;background:#250d1a;">🦱<span class="rune-count">x13</span></div><div class="rune-name">Yuji Hair</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#95a5a6;background:#181c1f;">🪖<span class="rune-count">x2</span></div><div class="rune-name">Saber Armor</div></div>
+          <div class="rune-card"><div class="rune-img-wrap" style="border-color:#e74c3c;background:#251010;">🎅</div><div class="rune-name">Santa Hat</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
   <div class="subpage" id="subpage-sub3"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
   <div class="subpage" id="subpage-sub4"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
   <div class="subpage" id="subpage-sub5"><div class="placeholder"><div class="placeholder-icon">📋</div><div class="placeholder-text">Contenu à venir</div></div></div>
@@ -506,25 +629,14 @@ var DATA = {
     ]
   },
   cc: {
-    label: "CC — Chance de Crit", cls: "cc", best_total: 318,
+    label: "CC — Chance de Crit", cls: "cc", best_total: 107,
     rows: [
-      { id: "cc_artefact",  label: "Artéfact",         best: 79.6, yours: 73   },
-      { id: "cc_tour",      label: "Tour Infinie",      best: 5,    yours: 0    },
-      { id: "cc_rush",      label: "Rush de boss",      best: 5,    yours: 0    },
-      { id: "cc_reroll",    label: "Stat reroll",       best: 7,    yours: 5    },
-      { id: "cc_arbre",     label: "Arbre de compét",  best: 5,    yours: 5    },
-      { id: "cc_blessing",  label: "Blessing (B?)",    best: 5,    yours: 5    },
-      { id: "cc_titre",     label: "Titre",             best: 50,   yours: 40   },
-      { id: "cc_tour2",     label: "Tour Infinie",      best: 5,    yours: 0    },
-      { id: "cc_rush2",     label: "Rush de boss",      best: 5,    yours: 0    },
-      { id: "cc_arbre2",    label: "Arbre de compét",  best: 25,   yours: 20   },
-      { id: "cc_runes",     label: "Runes",             best: 28,   yours: 25.9 },
-      { id: "cc_reroll2",   label: "Stat Re-roll",      best: 12,   yours: 10   },
-      { id: "cc_specpass",  label: "Spec passive",      best: 15,   yours: 14.6 },
-      { id: "cc_base",      label: "Base",              best: 100,  yours: 100  },
-      { id: "cc_race",      label: "Race",              best: 25,   yours: 25   },
-      { id: "cc_clan",      label: "Clan",              best: 12.5, yours: 12.5 },
-      { id: "cc_ascension", label: "Ascension",         best: 40,   yours: 40   }
+      { id: "cc_artefact",  label: "Artéfact",        best: 79.6, yours: 73 },
+      { id: "cc_tour",      label: "Tour Infinie",     best: 5,    yours: 0  },
+      { id: "cc_rush",      label: "Rush de boss",     best: 5,    yours: 0  },
+      { id: "cc_reroll",    label: "Stat reroll",      best: 7,    yours: 5  },
+      { id: "cc_arbre",     label: "Arbre de compét",  best: 5,    yours: 5  },
+      { id: "cc_blessing",  label: "Blessing (B?)",    best: 5,    yours: 5  }
     ]
   },
   cd: {
@@ -934,10 +1046,141 @@ function updateLuckCard(catKey) {
   if (f) f.style.width = pct + '%';
 }
 
+// ── Builds ──
+function showBuildTab(id, el) {
+  document.querySelectorAll('.build-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('#page-builds .subtab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('buildtab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── Builds ──
+function showBuildTab(id, el) {
+  document.querySelectorAll('.build-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('#page-builds .subtab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('buildtab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+var BUILDS = {
+  sword: {
+    title: "Best Sword Build",
+    tag: "META",
+    tagCls: "tag-meta",
+    sections: [
+      {
+        heading: "Équipement",
+        rows: [
+          { label: "Meilleure Rune",       value: "Primordial Rune" },
+          { label: "Meilleur Trait",        value: "Emperor" },
+          { label: "Meilleur Artéfact",     value: "Abyssal Crown Set (Legendary)" },
+          { label: "Meilleure Épée",        value: "True Aizen (awaiting update)" },
+          { label: "Meilleure Mêlée",       value: "Strongest Shinobi" },
+          { label: "Meilleur Fruit",        value: "Light / Quake" },
+          { label: "Meilleur Accesoire",    value: "Atomic Outfit" }
+        ]
+      },
+      {
+        heading: "Stats d'Artéfact",
+        note: "Main stat: CD ou DMG",
+        rows: [
+          { label: "Substat 1", value: "CC — Critical Chance" },
+          { label: "Substat 2", value: "CD — Critical Damage" },
+          { label: "Substat 3", value: "DMG — Damage" }
+        ]
+      },
+      {
+        heading: "Progressions à Max",
+        rows: [
+          { label: "Arbre de compétences",    value: "490 SP" },
+          { label: "Rush de boss",             value: "Max" },
+          { label: "Tour Infinie",             value: "Max" },
+          { label: "Spec Passives",            value: "Berserker / Executioner" },
+          { label: "Haki",                     value: "Level 100" },
+          { label: "Observation Haki",         value: "Level 50" },
+          { label: "Haki du Conquérant",       value: "Level 35" },
+          { label: "Stat de Rune",             value: "Level 60" },
+          { label: "Blessing",                 value: "Level 10 (Max)" },
+          { label: "Ascension",                value: "VIII (8)" }
+        ]
+      },
+      {
+        heading: "Race & Clan",
+        rows: [
+          { label: "Meilleure Race",  value: "Swordblessed / Warlord (Mythical) — 0.05%" },
+          { label: "→ Sword",    value: "Swordblessed" },
+          { label: "→ Melee",    value: "Warlord" },
+          { label: "Meilleur Clan",  value: "Pride ou Eminence" },
+          { label: "→ Pride",    value: "Purement pour les dégâts" },
+          { label: "→ Eminence", value: "Purement pour le farming" }
+        ]
+      },
+      {
+        heading: "Titres & Stats",
+        rows: [
+          { label: "Meilleur Titre DMG", value: "Eminence Incarnate (+82.5% DMG)" },
+          { label: "Meilleures Stats",   value: "Z ou SSS sur tout" }
+        ]
+      }
+    ]
+  },
+  luck: {
+    title: "Best Luck Build",
+    tag: "À venir",
+    tagCls: "tag-b",
+    sections: [
+      { heading: "", rows: [{ label: "Statut", value: "Contenu à venir" }] }
+    ]
+  },
+  melee: {
+    title: "Best Mêlée Build",
+    tag: "À venir",
+    tagCls: "tag-b",
+    sections: [
+      { heading: "", rows: [{ label: "Statut", value: "Contenu à venir" }] }
+    ]
+  }
+};
+
+function buildDetailCard(build) {
+  var sectionsHtml = build.sections.map(function(sec) {
+    var headingHtml = sec.heading
+      ? '<div class="build-section-heading">' + sec.heading + '</div>'
+      : '';
+    var noteHtml = sec.note
+      ? '<div class="build-section-note">' + sec.note + '</div>'
+      : '';
+    var rowsHtml = sec.rows.map(function(r) {
+      var isNote = r.label.startsWith('→');
+      return '<div class="build-detail-row' + (isNote ? ' build-detail-sub' : '') + '">' +
+        '<span class="build-detail-label">' + r.label + '</span>' +
+        '<span class="build-detail-val">' + r.value + '</span>' +
+      '</div>';
+    }).join('');
+    return '<div class="build-section">' + headingHtml + noteHtml + rowsHtml + '</div>';
+  }).join('');
+
+  return '<div class="build-detail-card">' +
+    '<div class="build-detail-header">' +
+      '<span class="build-detail-title">' + build.title + '</span>' +
+      '<span class="build-tag ' + build.tagCls + '">' + build.tag + '</span>' +
+    '</div>' +
+    '<div class="build-detail-body">' + sectionsHtml + '</div>' +
+  '</div>';
+}
+
+function buildBuildsPage() {
+  ['sword','luck','melee'].forEach(function(cat) {
+    var el = document.getElementById('builds-' + cat);
+    if (el) el.innerHTML = buildDetailCard(BUILDS[cat]);
+  });
+}
+
 // ── Init ──
 loadSaved();
 document.getElementById('grid').innerHTML = Object.keys(DATA).map(buildCard).join('');
 buildArtGrid();
+buildBuildsPage();
 buildLuckGrid();
 buildCodes();
 </script>
