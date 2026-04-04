@@ -182,6 +182,8 @@
   .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
   .btn-primary:hover { opacity: 0.85; }
   .save-msg { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--good); align-self: center; opacity: 0; transition: opacity 0.3s; }
+  .note-toggle-btn { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; color: var(--muted); background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
+  .note-toggle-btn:hover { color: var(--text); border-color: #3a3d4a; }
   .save-msg.visible { opacity: 1; }
   /* BUILDS PAGE */
   .build-tab { display: none; }
@@ -770,28 +772,46 @@ var DATA = {
     ]
   },
   cc: {
-    label: "CC — Chance de Crit", cls: "cc", best_total: 111,
+    label: "CC — Chance de Crit", cls: "cc",
+    toggle: {
+      id: "cc_plastron_mode",
+      options: [
+        { label: "Plastron Crit DMG", best_total: 91,  artefact_best: 59.5 },
+        { label: "Plastron Crit CC",  best_total: 111, artefact_best: 79.6 }
+      ],
+      active: 0
+    },
     rows: [
-      { id: "cc_artefact",  label: "Artéfact",        best: 79.6, yours: 73 },
-      { id: "cc_tour",      label: "Tour Infinie",     best: 5,    yours: 0  },
-      { id: "cc_rush",      label: "Rush de boss",     best: 5,    yours: 0  },
-      { id: "cc_reroll",    label: "Stat reroll",      best: 7,    yours: 5  },
-      { id: "cc_arbre",     label: "Arbre de compét",  best: 5,    yours: 5  },
-      { id: "cc_blessing",  label: "Blessing (B?)",    best: 5,    yours: 5  },
-      { id: "cc_power",     label: "Power",            best: 4,    yours: 0  }
+      { id: "cc_artefact_base", label: "Artéfact base",  best: 5,    yours: 5  },
+      { id: "cc_artefact",      label: "Artéfact",        best: 59.5, yours: 59.5, toggleBest: true },
+      { id: "cc_tour",          label: "Tour Infinie",    best: 5,    yours: 0  },
+      { id: "cc_rush",          label: "Rush de boss",    best: 5,    yours: 0  },
+      { id: "cc_reroll",        label: "Stat reroll",     best: 7,    yours: 5  },
+      { id: "cc_arbre",         label: "Arbre de compét", best: 5,    yours: 5  },
+      { id: "cc_blessing",      label: "Blessing (B?)",   best: 5,    yours: 5  },
+      { id: "cc_power",         label: "Power",           best: 4,    yours: 0  }
     ]
   },
   cd: {
-    label: "CD — Dégats de Crit", cls: "cd", best_total: 267,
+    label: "CD — Dégats de Crit", cls: "cd",
+    toggle: {
+      id: "cd_plastron_mode",
+      options: [
+        { label: "Plastron Crit DMG", best_total: 308.7, artefact_best: 133.7 },
+        { label: "Plastron Crit CC",  best_total: 287,   artefact_best: 112   }
+      ],
+      active: 0
+    },
     rows: [
-      { id: "cd_artefacts", label: "Artéfacts",        best: 142,  yours: 121.6 },
-      { id: "cd_tour",      label: "Tour Infinie",      best: 15,   yours: 9     },
-      { id: "cd_specpass",  label: "Spec Passive",      best: 15,   yours: 12.6  },
-      { id: "cd_reroll",    label: "Stat Re-roll",      best: 35,   yours: 35    },
-      { id: "cd_arbre",     label: "Arbre de compét",  best: 25,   yours: 25    },
-      { id: "cd_rush",      label: "Rush de boss",      best: 15,   yours: 15    },
-      { id: "cd_blessing",  label: "Blessing (B?)",    best: 7.5,  yours: 7.5   },
-      { id: "cd_power",     label: "Power",             best: 12,   yours: 0     }
+      { id: "cd_base",      label: "Base",              best: 50,    yours: 50    },
+      { id: "cd_artefacts", label: "Artéfacts",          best: 133.7, yours: 121.6, toggleBest: true },
+      { id: "cd_tour",      label: "Tour Infinie",       best: 15,    yours: 9     },
+      { id: "cd_specpass",  label: "Spec Passive",       best: 15,    yours: 12.6  },
+      { id: "cd_reroll",    label: "Stat Re-roll",       best: 35,    yours: 35    },
+      { id: "cd_arbre",     label: "Arbre de compét",    best: 25,    yours: 25    },
+      { id: "cd_rush",      label: "Rush de boss",       best: 15,    yours: 15    },
+      { id: "cd_blessing",  label: "Blessing (B?)",      best: 7.5,   yours: 7.5   },
+      { id: "cd_power",     label: "Power",              best: 12,    yours: 0     }
     ]
   }
 };
@@ -866,14 +886,15 @@ function getCardTotal(catKey) {
 
 function updateCard(catKey) {
   var cat = DATA[catKey];
+  var best_total = cat.toggle ? cat.toggle.options[cat.toggle.active].best_total : cat.best_total;
   var yours = getCardTotal(catKey);
-  var missing = cat.best_total - yours;
-  var pct = Math.min(100, (yours / cat.best_total) * 100);
+  var missing = best_total - yours;
+  var pct = Math.min(100, (yours / best_total) * 100);
   var t = document.getElementById(catKey + '_total');
   var m = document.getElementById(catKey + '_missing');
   var f = document.getElementById(catKey + '_fill');
   var y = document.getElementById(catKey + '_yours');
-  if (t) t.textContent = yours.toFixed(1) + '% / ' + cat.best_total + '%';
+  if (t) t.textContent = yours.toFixed(1) + '% / ' + best_total + '%';
   if (y) y.textContent = yours.toFixed(1) + '%';
   if (m) m.textContent = Math.max(0, missing).toFixed(1) + '%';
   if (f) f.style.width = pct + '%';
@@ -883,28 +904,71 @@ function updateAll() {
   Object.keys(DATA).forEach(updateCard);
 }
 
+function togglePlastron(catKey, idx) {
+  var cat = DATA[catKey];
+  cat.toggle.active = idx;
+  var opt = cat.toggle.options[idx];
+  // Update the artefact best display
+  var bestEl = document.getElementById(catKey + '_artefact_best');
+  if (bestEl) bestEl.textContent = opt.artefact_best + '%';
+  // Update toggle button styles
+  cat.toggle.options.forEach(function(_, i) {
+    var btn = document.getElementById(catKey + '_toggle_' + i);
+    if (btn) {
+      btn.style.background = i === idx ? 'var(--accent-cc)' : 'transparent';
+      btn.style.color = i === idx ? '#0e0f13' : 'var(--muted)';
+      btn.style.borderColor = i === idx ? 'var(--accent-cc)' : 'var(--border)';
+    }
+  });
+  updateCard(catKey);
+}
+
 function buildCard(catKey) {
   var cat = DATA[catKey];
+  var tog = cat.toggle;
+  var best_total = tog ? tog.options[tog.active].best_total : cat.best_total;
   var yours_total = cat.rows.reduce(function(s, r) { return s + r.yours; }, 0);
-  var missing = cat.best_total - yours_total;
-  var pct = Math.min(100, (yours_total / cat.best_total) * 100);
+  var missing = best_total - yours_total;
+  var pct = Math.min(100, (yours_total / best_total) * 100);
+
   var rows = cat.rows.map(function(row) {
+    var bestDisplay = row.toggleBest
+      ? '<span id="' + catKey + '_artefact_best">' + (tog ? tog.options[tog.active].artefact_best : row.best) + '%</span>'
+      : (row.best + '%');
     return '<div class="row">' +
       '<span class="row-label">' + row.label + '</span>' +
-      '<span class="row-best">' + row.best + '%</span>' +
+      '<span class="row-best">' + bestDisplay + '</span>' +
       '<div class="input-wrap">' +
         '<input class="stat-input" type="number" id="' + row.id + '" value="' + row.yours + '" min="0" max="999" step="0.1" oninput="updateCard(\'' + catKey + '\')">' +
         '<span class="pct-symbol">%</span>' +
       '</div></div>';
   }).join('');
+
+  var toggleHtml = '';
+  if (tog) {
+    toggleHtml = '<div style="display:flex;align-items:center;gap:6px;padding:10px 24px 4px;">' +
+      '<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.05em;color:var(--muted);text-transform:uppercase;white-space:nowrap;">Plastron :</span>' +
+      tog.options.map(function(opt, i) {
+        var active = i === tog.active;
+        return '<button id="' + catKey + '_toggle_' + i + '" onclick="togglePlastron(\'' + catKey + '\',' + i + ')" style="' +
+          'font-family:\'Syne\',sans-serif;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all 0.15s;' +
+          'background:' + (active ? 'var(--accent-cc)' : 'transparent') + ';' +
+          'color:' + (active ? '#0e0f13' : 'var(--muted)') + ';' +
+          'border:1px solid ' + (active ? 'var(--accent-cc)' : 'var(--border)') + ';' +
+        '">' + opt.label + '</button>';
+      }).join('') +
+    '</div>';
+  }
+
   return '<div class="card ' + cat.cls + '">' +
     '<div class="card-header">' +
       '<div class="card-dot"></div>' +
       '<span class="card-title">' + cat.label + '</span>' +
-      '<span class="card-total" id="' + catKey + '_total">' + yours_total.toFixed(1) + '% / ' + cat.best_total + '%</span>' +
+      '<span class="card-total" id="' + catKey + '_total">' + yours_total.toFixed(1) + '% / ' + best_total + '%</span>' +
     '</div>' +
     '<div class="progress-bar"><div class="progress-fill" id="' + catKey + '_fill" style="width:' + pct + '%"></div></div>' +
     '<div class="card-body">' +
+      toggleHtml +
       '<div class="row" style="padding-top:10px;padding-bottom:2px">' +
         '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Catégorie</span>' +
         '<span style="font-size:0.7rem;letter-spacing:0.06em;color:var(--muted);font-weight:700;text-transform:uppercase;">Meilleur</span>' +
@@ -933,9 +997,10 @@ var ART_PIECES = [
   },
   {
     key: "plastron", label: "Plastron", icon: "🛡️",
-    mainStat: { id: "main", label: "Crit Chance / Crit DMG", best: 30.6, best2: 59.7 },
+    plastronMode: 1,
+    mainStat: { id: "main", label: "Crit DMG", best: 59.7, best_cc: 30.6, best_cd: 59.7 },
     subStats: [
-      { id: "cccd",    label: "Crit Chance / Crit DMG", best: 10.5, best2: 18, important: true },
+      { id: "cccd",    label: "Crit DMG", best: 18, best_cc: 10.5, best_cd: 18, toggleSub: true, important: true },
       { id: "dmg",     label: "DMG",           best: 9,    important: true  },
       { id: "hp",      label: "HP %",          best: 15                     },
       { id: "dmgred",  label: "DMG Reduction", best: 4                      },
@@ -977,18 +1042,24 @@ function artRowHtml(piece, stat, isMain) {
       badge = '<span style="font-family:\'DM Mono\',monospace;font-size:0.62rem;font-weight:500;color:#7a7f90;margin-left:6px;letter-spacing:0.03em;">remplaçable</span>';
     }
   }
+  var isDynMain = isMain && piece.plastronMode !== undefined;
+  var isDynSub = !isMain && stat.toggleSub;
+  var labelId = isDynMain ? ' id="plastron_main_label"' : (isDynSub ? ' id="plastron_sub_label"' : '');
+  var bestId  = isDynMain ? ' id="plastron_main_best"'  : (isDynSub ? ' id="plastron_sub_best"'  : '');
   var labelStr = isMain
-    ? '<span class="row-label" style="color:var(--accent-art);font-weight:700;">' + stat.label + '</span>'
-    : '<span class="row-label" style="display:flex;align-items:center;">' + stat.label + badge + '</span>';
-  var bestLabel = stat.best2
-    ? stat.best + '% / ' + stat.best2 + '%'
-    : stat.best + '%';
+    ? '<span class="row-label" style="color:var(--accent-art);font-weight:700;"' + labelId + '>' + stat.label + '</span>'
+    : '<span class="row-label" style="display:flex;align-items:center;"><span' + labelId + '>' + stat.label + '</span>' + badge + '</span>';
+  var bestSpan = '<span class="row-best"' + bestId + '>' + stat.best + '%</span>';
+  var isDyn = isDynMain || isDynSub;
   return '<div class="row art-row">' +
     labelStr +
-    '<span class="art-missing-val" id="' + missId + '" style="font-family:\'DM Mono\',monospace;font-size:0.72rem;color:var(--bad);min-width:44px;text-align:right;">—</span>' +
+    '<span style="display:flex;align-items:center;gap:6px;justify-content:flex-end;">' +
+      bestSpan +
+      '<span class="art-missing-val" id="' + missId + '" style="font-family:\'DM Mono\',monospace;font-size:0.72rem;color:var(--bad);min-width:44px;text-align:right;">\u2014</span>' +
+    '</span>' +
     '<div class="input-wrap">' +
       '<input class="stat-input" type="number" id="' + rowId + '" value="0" min="0" max="999" step="0.1" ' +
-        'oninput="updateArtRow(\'' + piece.key + '\',\'' + stat.id + '\',' + stat.best + ')">' +
+        'oninput="updateArtRow(\'' + piece.key + '\',' + '\'' + stat.id + '\',' + stat.best + ',' + (isDyn ? 'true' : 'false') + ')">' +
       '<span class="pct-symbol">%</span>' +
     '</div></div>';
 }
@@ -1003,12 +1074,22 @@ function buildArtCard(piece) {
     '</div>';
   var subRows = piece.subStats.map(function(stat) { return artRowHtml(piece, stat, false); }).join('');
 
+  var toggleHtml = '';
+  if (piece.plastronMode !== undefined) {
+    toggleHtml = '<div style="display:flex;align-items:center;gap:6px;padding:8px 24px 2px;">' +
+      '<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.05em;color:var(--muted);text-transform:uppercase;white-space:nowrap;">Plastron :</span>' +
+      '<button id="plastron_art_toggle_1" onclick="togglePlastronArt(1)" style="font-family:\'Syne\',sans-serif;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all 0.15s;background:var(--accent-art);color:#0e0f13;border:1px solid var(--accent-art);">Crit DMG</button>' +
+      '<button id="plastron_art_toggle_0" onclick="togglePlastronArt(0)" style="font-family:\'Syne\',sans-serif;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all 0.15s;background:transparent;color:var(--muted);border:1px solid var(--border);">Crit Chance</button>' +
+    '</div>';
+  }
+
   return '<div class="card art">' +
     '<div class="card-header">' +
       '<div class="card-dot"></div>' +
       '<span class="card-title">' + piece.icon + ' ' + piece.label + '</span>' +
     '</div>' +
     '<div class="card-body">' +
+      toggleHtml +
       '<div class="row" style="padding-top:10px;padding-bottom:2px">' +
         '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--accent-art);font-weight:700;text-transform:uppercase;">Stat principale</span>' +
         '<span style="font-size:0.65rem;letter-spacing:0.08em;color:var(--bad);font-weight:700;text-transform:uppercase;min-width:44px;text-align:right;">Manquant</span>' +
@@ -1020,21 +1101,61 @@ function buildArtCard(piece) {
     '</div></div>';
 }
 
-function updateArtRow(pieceKey, statId, best) {
+function updateArtRow(pieceKey, statId, best, isDyn) {
   var rowId = 'art_' + pieceKey + '_' + statId;
   var missId = 'miss_' + rowId;
   var el = document.getElementById(rowId);
   var missEl = document.getElementById(missId);
   if (!el || !missEl) return;
+  // If dynamic (plastron toggle), read best from DOM span
+  var effectiveBest = best;
+  if (isDyn) {
+    var isMain = (statId === 'main');
+    var bestEl = document.getElementById(isMain ? 'plastron_main_best' : 'plastron_sub_best');
+    if (bestEl) effectiveBest = parseFloat(bestEl.textContent) || best;
+  }
   var val = parseFloat(el.value) || 0;
-  var missing = best - val;
+  var missing = effectiveBest - val;
   if (missing <= 0) {
-    missEl.textContent = '✓';
+    missEl.textContent = '\u2713';
     missEl.style.color = 'var(--good)';
   } else {
     missEl.textContent = '-' + missing.toFixed(1) + '%';
     missEl.style.color = 'var(--bad)';
   }
+}
+
+// Plastron art mode: 1 = Crit DMG (default), 0 = Crit Chance
+var plastronArtMode = 1;
+function togglePlastronArt(mode) {
+  plastronArtMode = mode;
+  var piece = ART_PIECES.find(function(p) { return p.key === 'plastron'; });
+  if (!piece) return;
+  var mainBest = mode === 1 ? piece.mainStat.best_cd : piece.mainStat.best_cc;
+  var subBest  = mode === 1 ? piece.subStats[0].best_cd : piece.subStats[0].best_cc;
+  var mainLabel = mode === 1 ? 'Crit DMG' : 'Crit Chance';
+  var subLabel  = mode === 1 ? 'Crit DMG' : 'Crit Chance';
+  // Update DOM labels and bests
+  var ml = document.getElementById('plastron_main_label');
+  var mb = document.getElementById('plastron_main_best');
+  var sl = document.getElementById('plastron_sub_label');
+  var sb = document.getElementById('plastron_sub_best');
+  if (ml) ml.textContent = mainLabel;
+  if (mb) mb.textContent = mainBest + '%';
+  if (sl) sl.textContent = subLabel;
+  if (sb) sb.textContent = subBest + '%';
+  // Recompute missing for both rows
+  updateArtRow('plastron', 'main', mainBest, false);
+  updateArtRow('plastron', 'cccd', subBest, false);
+  // Update button styles
+  [0, 1].forEach(function(i) {
+    var btn = document.getElementById('plastron_art_toggle_' + i);
+    if (!btn) return;
+    var active = i === mode;
+    btn.style.background = active ? 'var(--accent-art)' : 'transparent';
+    btn.style.color      = active ? '#0e0f13' : 'var(--muted)';
+    btn.style.borderColor = active ? 'var(--accent-art)' : 'var(--border)';
+  });
 }
 
 function buildArtGrid() {
@@ -1048,13 +1169,14 @@ function buildArtGrid() {
       var mainId = 'art_' + piece.key + '_' + piece.mainStat.id;
       var mainEl = document.getElementById(mainId);
       if (mainEl && saved[mainId] !== undefined) { mainEl.value = saved[mainId]; }
-      updateArtRow(piece.key, piece.mainStat.id, piece.mainStat.best);
+      var mainIsDyn = piece.plastronMode !== undefined;
+      updateArtRow(piece.key, piece.mainStat.id, piece.mainStat.best, mainIsDyn);
       // sub stats
       piece.subStats.forEach(function(stat) {
         var rowId = 'art_' + piece.key + '_' + stat.id;
         var el = document.getElementById(rowId);
         if (el && saved[rowId] !== undefined) { el.value = saved[rowId]; }
-        updateArtRow(piece.key, stat.id, stat.best);
+        updateArtRow(piece.key, stat.id, stat.best, !!stat.toggleSub);
       });
     });
   } catch(e) {}
@@ -1075,15 +1197,24 @@ var LUCK_DATA = {
       { id: "luck_arbre",      label: "Arbre de compét",  best: 25,   yours: 25   },
       { id: "luck_runes",      label: "Rune",             best: 28,   yours: 28   },
       { id: "luck_reroll",     label: "Stat Re-roll",     best: 12,   yours: 12   },
-      { id: "luck_specpass",   label: "Spec passive",     best: 15,   yours: 15   },
+      { id: "luck_specpass",   label: "Spec passive",     best: 15,   yours: 15,  note: "Le max vient de Luck V (15%), mais Fortune Chosen (10%) est meilleur pour les drops" },
       { id: "luck_base",       label: "Base",             best: 100,  yours: 100  },
       { id: "luck_race",       label: "Race",             best: 25,   yours: 25   },
       { id: "luck_clan",       label: "Clan",             best: 12.5, yours: 12.5 },
       { id: "luck_ascension",  label: "Ascension",        best: 55,   yours: 40   },
-      { id: "luck_power",      label: "Power",            best: 15,   yours: 0    }
+      { id: "luck_power",      label: "Power",            best: 15,   yours: 0,   note: "Le max de 15% vient avec le Power Colossus" }
     ]
   }
 };
+
+function toggleNote(btn) {
+  var panel = btn.nextElementSibling;
+  var arrow = btn.querySelector('.note-arrow');
+  if (!panel) return;
+  var open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.style.transform = open ? '' : 'rotate(90deg)';
+}
 
 function toggleLuckGamepass() {
   luckGamepass = !luckGamepass;
@@ -1163,13 +1294,18 @@ function buildLuckCard(catKey) {
     var gpDisplay = luckGamepass
       ? '<span id="luck_display_' + row.id + '" style="font-family:\'DM Mono\',monospace;font-size:0.72rem;color:var(--good);min-width:52px;text-align:right;">' + displayVal + '%</span>'
       : '<span id="luck_display_' + row.id + '" style="display:none;"></span>';
+    var noteId = 'note_' + row.id;
+    var noteHtml = row.note
+      ? '<div style="grid-column:1/-1;padding:2px 0 6px;"><button class="note-toggle-btn" onclick="toggleNote(this)"><span class="note-arrow" style="font-size:0.6rem;transition:transform 0.2s;display:inline-block;">&#9654;</span> Plus d&#39;informations</button><div class="note-panel" style="display:none;margin-top:6px;padding:8px 12px;background:rgba(167,139,250,0.07);border:1px solid rgba(167,139,250,0.2);border-left:3px solid var(--accent-cc);border-radius:0 8px 8px 0;font-family:DM Mono,monospace;font-size:0.72rem;color:#c0b4f0;line-height:1.5;">&#9888; ' + row.note + '</div></div>'
+      : '';
     return '<div class="row">' +
       '<span class="row-label">' + row.label + '</span>' +
+      '<span class="row-best">' + row.best + '%</span>' +
       gpDisplay +
       '<div class="input-wrap">' +
-        '<input class="stat-input" type="number" id="' + row.id + '" value="' + row.yours + '" min="0" max="999" step="0.1" oninput="updateLuckCard(\'' + catKey + '\')">' +
+        '<input class="stat-input" type="number" id="' + row.id + '" value="' + row.yours + '" min="0" max="999" step="0.1" oninput="updateLuckCard(\'' + catKey + '\')">'+
         '<span class="pct-symbol">%</span>' +
-      '</div></div>';
+      '</div></div>' + noteHtml;
   }).join('');
   var gpLabel = luckGamepass
     ? '<span style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--good);margin-left:8px;letter-spacing:0.03em;">×2 GP</span>'
@@ -1229,13 +1365,6 @@ function showBuildTab(id, el) {
   el.classList.add('active');
 }
 
-// ── Builds ──
-function showBuildTab(id, el) {
-  document.querySelectorAll('.build-tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('#page-builds .subtab').forEach(function(t) { t.classList.remove('active'); });
-  document.getElementById('buildtab-' + id).classList.add('active');
-  el.classList.add('active');
-}
 
 var BUILDS = {
   sword: {
@@ -1271,20 +1400,21 @@ var BUILDS = {
           { label: "Arbre de compétences",    value: "490 SP" },
           { label: "Rush de boss",             value: "Max" },
           { label: "Tour Infinie",             value: "Max" },
-          { label: "Spec Passives",            value: "Berserker / Rampage" },
+          { label: "Spec Passives",            value: "Berserker / Executioner" },
           { label: "Haki",                     value: "Level 100" },
           { label: "Observation Haki",         value: "Level 50" },
           { label: "Haki du Conquérant",       value: "Level 35" },
           { label: "Stat de Rune",             value: "Level 60" },
-          { label: "Blessing",                 value: "Moon Outfit B10 (Max Stat)" },
-          { label: "Ascension",                value: "X (10)" }
+          { label: "Blessing",                 value: "Berserker (Max Stat)" },
+          { label: "Ascension",                value: "VIII (8)" }
         ]
       },
       {
         heading: "Race & Clan",
         rows: [
-          { label: "Meilleure Race",  value: "Swordblessed / (Mythical) 1/750" },
+          { label: "Meilleure Race",  value: "Swordblessed / Warlord (Mythical) — 0.05%" },
           { label: "→ Sword",    value: "Swordblessed" },
+          { label: "→ Melee",    value: "Warlord" },
           { label: "Meilleur Clan",  value: "Pride ou Eminence" },
           { label: "→ Pride",    value: "Purement pour les dégâts" },
           { label: "→ Eminence", value: "Purement pour le farming" }
@@ -1293,7 +1423,7 @@ var BUILDS = {
       {
         heading: "Titres & Stats",
         rows: [
-          { label: "Meilleur Titre DMG", value: "Six Eyed Demon(+85% DMG)" },
+          { label: "Meilleur Titre DMG", value: "Eminence Incarnate (+85% DMG)" },
           { label: "Meilleures Stats",   value: "Z ou SSS sur tout" }
         ]
       }
